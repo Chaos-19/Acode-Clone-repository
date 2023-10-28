@@ -1,0 +1,40 @@
+/*clone dialog*/
+.clone-dialog {
+    padding: 5px 15px;
+    overflow: hidden;
+    /* width: 100%; */
+}
+.clone-dialog p {
+    margin-bottom: 10px;
+}
+.clone-dialog p,
+.git-cloneBox span {
+    font-size: 18px;
+}
+
+.clone-dialog p a {
+    color: #095dff;
+}
+.clone-cridential #provider {
+    padding: 1px;
+}
+
+.clone-dialog > input {
+    width: 100%;
+    padding: 10px 1px;
+    border: 1px solid;
+    margin: auto;
+}
+
+.git-cloneBox {
+    padding: 10px 15px;
+    margin: 5px 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.depth input {
+    width: 20%;
+}
