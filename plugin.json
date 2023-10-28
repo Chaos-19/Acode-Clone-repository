@@ -1,6 +1,6 @@
 {
-    "id": "acode.clone.repo",
-    "name": "clone-repo",
+    "id": "aocde.clone.repo",
+    "name": "Clone Repository",
     "main": "dist/main.js",
     "version": "1.0.0",
     "readme": "readme.md",

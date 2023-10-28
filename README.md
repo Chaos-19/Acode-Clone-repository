@@ -1,8 +1,8 @@
-# Git Clone Plugin for Acode
+# CLONE REPOSITORY Plugin for Acode
 
 ## Overview
 
-I have developed this plugin to allow you to clone a Git repository to your local machine using Lightning-FS and isomorphic-git. It also supports authentication for cloning private repositories.
+ the plugin allow you to clone a Git repository to your local machine . It also supports authentication for cloning private repositories.
 
 ## Features
 
@@ -17,7 +17,7 @@ To install the plugin, open Acode and go to Extensions > Manage Extensions. Sear
 ## Usage
 
 1. To clone a Git repository, open Acode and go to File > Clone Git Repository.
-2. Enter the URL of the repository you want to clone and click the Clone button.
+2. Enter the URL of the repository you want to clone and click ok.
 3. If the repository is private, you will be prompted to enter your credentials.
 4. Once the repository has been cloned, it will appear in the Workspace pane. You can then open the repository by double-clicking on it.
 
@@ -37,12 +37,12 @@ If you are still having problems, please create an issue on my plugin's GitHub r
 
 ## Contributions and Acknowledgments
 
-I would like to express my gratitude to the open-source communities behind [Lightning-FS](https://github.com/Medium/opensource) and [isomorphic-git](https://github.com/isomorphic-git/isomorphic-git) for their incredible work in developing and maintaining these essential libraries. This plugin wouldn't be possible without their contributions.
+I would like to express my gratitude to the open-source communities behind [Lightning-FS](https://github.com/isomorphic-git/lightning-fs.git) and [isomorphic-git](https://github.com/isomorphic-git/isomorphic-git) for their incredible work in developing and maintaining these essential package. This plugin wouldn't be possible without their contributions.
 
 ## Feedback
 
 If you have any feedback on the plugin, please feel free to leave a comment below or create an issue on my plugin's GitHub repository.
-
+[CLONE REPOSITORY](https://github.com/Chaos-19/Acode-Clone-repository.git)
 ## Drawback
 
 Currently, the plugin will block other operations because it doesn't use a web worker. This will be fixed in the next update.
@@ -50,11 +50,3 @@ Currently, the plugin will block other operations because it doesn't use a web w
 ## License
 
 [License Information Here]
-
-## Apology
-
-I apologize for any inconvenience this may cause. I am working on improving the plugin and making it as user-friendly as possible. Thank you for your patience and understanding.
-
---- 
-
-In this version, the first-person pronoun "I" has been used throughout the README to make it clear that you, as the developer, are addressing the users directly.

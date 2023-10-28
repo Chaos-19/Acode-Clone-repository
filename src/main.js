@@ -1,5 +1,4 @@
 import plugin from '../plugin.json';
-import style from "./style.css";
 
 import * as git from "isomorphic-git";
 import LightningFS from "@isomorphic-git/lightning-fs";
@@ -9,34 +8,35 @@ const Url = acode.require('Url');
 const loader = acode.require("loader");
 const cAlert = acode.require("Alert");
 const fsOperation = acode.require('fsOperation');
+const prompt = acode.require('prompt');
 
-window.fs = new LightningFS("fs", {
+
+let fs = new LightningFS("fs", {
   wipe: true,
   fileDbName: "rootGitDir"
 });
-window.pfs = fs.promises;
-window.dir = ""
+let pfs = fs.promises;
+let dir = ""
 
 class AcodePlugin {
 
   async init() {
 
     editorManager.editor.commands.addCommand({
-      name: "clone-repo",
+      name: "clone-Repo",
       discription: "clone repository",
       bindKey: {
         win: "Ctrl-h"
       },
       exec: this.cloneRepo.bind(this)
     });
-    /* editorManager.editor.commands.addCommand({
-      name: "clone",
-      discription: "clone",
-      bindKey: {
-        win: "Ctrl-l"
-      },
-      exec: this.run.bind(this)
-    });*/
+    let command = {
+      name: "clone-Repository",
+      discription: "clone repository",
+      exec: this.cloneRepo.bind(this)
+    };
+    editorManager.editor.commands.addCommand(command);
+
   }
 
   async run() {
@@ -101,6 +101,11 @@ class AcodePlugin {
     }
 
     async cloneRepo() {
+      fs = new LightningFS("fs", {
+        wipe: true,
+        fileDbName: "rootGitDir"
+      });
+
       this.getURL()
       .then(url => {
         this.clone(url)
@@ -108,7 +113,12 @@ class AcodePlugin {
           this.run();
           window.toast("succesfully cloned", 400)
         })
-        .catch(error => cAlert(error))
+        .catch(error => {
+          cAlert(error)})
+        fs = new LightningFS("fs", {
+          wipe: true,
+          fileDbName: "rootGitDir"
+        });
       }).catch(error => cAlert(error))
     }
 
@@ -152,10 +162,11 @@ class AcodePlugin {
             }).then(() => {
               window.toast("Successfully Cloned", 4000);
               loader.destroy();
-              resolve(dir); // Resolve the Promise with the directory path
+              resolve(dir);
             }).catch((error) => {
               loader.destroy();
-              reject(error); // Reject the Promise with an error if the clone fails
+              reject(error);
+
             });
           });
         }
@@ -334,16 +345,30 @@ class AcodePlugin {
         required: true,
         placeholder: "URL (start with https://)",
         test: value => (value.startsWith("https://") && value.endsWith(".git"))
-      };
-      var remoteUrl = await prompt("Enter Remote Url",
-        "",
-        "search",
-        options);
-      return remoteUrl;
+      };;
+
+      return prompt(
+        'Enter Remote Url',
+        '',
+        'url',
+        options)
+      .then(url => {
+        if (!url) throw "please provide url"
+        return url
+      })
+      .catch(error => {
+        throw error
+      })
     }
 
     async destroy() {
-      editorManager.editor.commands.removeCommand("clone-repo")
+      editorManager.editor.commands.removeCommand("clone-Repo")
+      let command = {
+        name: "clone-Repository",
+        discription: "clone repository",
+        exec: this.cloneRepo.bind(this)
+      };
+      editorManager.editor.commands.removeCommand(command)
     }
   }
 
