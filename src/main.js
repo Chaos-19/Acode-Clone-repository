@@ -11,6 +11,7 @@ const cAlert = acode.require("Alert");
 const fsOperation = acode.require('fsOperation');
 
 window.fs = new LightningFS("fs", {
+  wipe: true,
   fileDbName: "rootGitDir"
 });
 window.pfs = fs.promises;
@@ -19,44 +20,23 @@ window.dir = ""
 class AcodePlugin {
 
   async init() {
-    //this.run = this.run.bind(this);
+
     editorManager.editor.commands.addCommand({
       name: "clone-repo",
       discription: "clone repository",
       bindKey: {
         win: "Ctrl-h"
       },
-      exec: ()=> {
-        //this.run()
-        let {
-          activeFile
-        } = editorManager;
-        let {
-          location
-        } = activeFile;
-        const path = location;
-        cAlert(path)
-
-        cAlert(JSON.stringify(window.addedFolder))
-        this.createDir(path+"/", "test-1").
-        then(res => {
-          this.createDir(path+"/"+res.folderName, "sub")
-          .then(name => {
-            this.createFile(path+"/"+res.folderName+"/"+name.folderName, "test-file.js", "test")
-
-          })
-        })
-      }
+      exec: this.cloneRepo.bind(this)
     });
-    editorManager.editor.commands.addCommand({
+    /* editorManager.editor.commands.addCommand({
       name: "clone",
       discription: "clone",
       bindKey: {
         win: "Ctrl-l"
       },
-      exec: this.cloneRepo.bind(this)
-    });
-
+      exec: this.run.bind(this)
+    });*/
   }
 
   async run() {
@@ -64,13 +44,10 @@ class AcodePlugin {
     .then(structure => {
       this.getDirToSaveTheFile()
       .then(path => {
-        cAlert(path)
         this.createFolderInDevice(structure, path)
       }) .catch(error => cAlert(error))
     }).catch(error => cAlert(error))
-
   }
-
 
 
   async createFile(location,
@@ -109,8 +86,18 @@ class AcodePlugin {
       textTransform: true,
       default: '',
       };
-      const SelectedPath = await select('SELECT DIRECTORY', options, opt);
-      return SelectedPath;
+      let selectedPath = await select('SELECT DIRECTORY', options, opt);
+      const check = selectedPath.includes("::primary:");
+      if (!check && !selectedPath.includes("com.termux.documents")) {
+        const dirInfo = options.find(value => value.includes(selectedPath))
+        selectedPath = selectedPath + `::primary:${dirInfo[1]}`;
+      }
+      if (selectedPath.includes("com.termux.documents") && !selectedPath.includes("::/data/data/com.termux/files/home/")) {
+        const dirInfo = options.find(value => value.includes(selectedPath))
+        selectedPath = selectedPath + `::/data/data/com.termux/files/home/${dirInfo[1]}`;
+      }
+
+      return selectedPath;
     }
 
     async cloneRepo() {
@@ -118,10 +105,9 @@ class AcodePlugin {
       .then(url => {
         this.clone(url)
         .then(dir => {
-          //  this.run();
+          this.run();
           window.toast("succesfully cloned", 400)
         })
-
         .catch(error => cAlert(error))
       }).catch(error => cAlert(error))
     }
@@ -131,49 +117,6 @@ class AcodePlugin {
       return pathArry.slice(-1).toString().replace(".git", "");
     }
 
-    /*async clone(remotURL) {
-      try {
-        dir = "/" + this.getDirName(remotURL);
-        await pfs.mkdir(dir);
-
-        if (remotURL) {
-          loader.create("Loading", "Fetching data...");
-          const corsProxy = "https://cors.isomorphic-git.org";
-          git.clone({
-            fs,
-            http,
-            dir,
-            url: remotURL,
-            corsProxy,
-            onProgress(evt) {
-              loader.create("Loading", "Fetching data...");
-            },
-            onMessage(msg) {
-              //  cAlert(msg);
-            },
-            onAuth(url) {
-              cAlert(url);
-            },
-            onAuthFailure({
-              url, auth
-            }) {
-              cAlert({
-                url,
-                auth
-              });
-            }
-          }).then(() => {
-            window.toast("succesfully Cloned", 4000);
-            loader.destroy();
-            return dir;
-          });
-        }
-      } catch (e) {
-        loader.destroy();
-        cAlert(e);
-      }
-
-    }*/
     async clone(remotURL) {
       try {
         dir = "/" + this.getDirName(remotURL);
@@ -194,17 +137,16 @@ class AcodePlugin {
                 loader.create("Loading", "Fetching data...");
               },
               onMessage(msg) {
-                // cAlert(msg);
+                loader.create("Loading", msg);
               },
-              onAuth(url) {
-                cAlert(url);
+              onAuth: (url) => {
+                return this.fillCredentials(url);
               },
-              onAuthFailure({
+              onAuthFailure: ({
                 url, auth
-              }) {
-                cAlert({
-                  url,
-                  auth
+              })=> {
+                return this.rejected({
+                  url, auth
                 });
               }
             }).then(() => {
@@ -223,7 +165,44 @@ class AcodePlugin {
       }
     }
 
-    createFolderInDevice(structure, location) {
+    async fillCredentials(url) {
+
+      const multiPrompt = acode.require('multiPrompt');
+
+      const gitCridentailProm = await multiPrompt(
+        'Enter You Cridential',
+        [ {
+          type: 'text',
+          id: 'username',
+          required: true,
+          placeholder: "Username"
+        }, {
+          type: 'password',
+          id: 'password',
+          required: true,
+          placeholder: "Token"
+        },],
+        url,
+      )
+
+      let username = gitCridentailProm["username"]
+
+      let password = gitCridentailProm["password"];
+
+      return {
+        username,
+        password
+      }
+    }
+    async rejected({
+      url, auth
+    }) {
+      cAlert("Authentication rejected");
+      return;
+    }
+
+    createFolderInDevice(structure,
+      location) {
       for (let key in structure) {
         if (typeof structure[key] === "object") {
           // Create a new folder
@@ -241,7 +220,6 @@ class AcodePlugin {
       }
     }
     async getFolder(name, location, innerFiles) {
-      cAlert(location)
       const folder = this.createDir(location, name);
 
       return folder.then(async result => {
@@ -341,6 +319,15 @@ class AcodePlugin {
       return Object.fromEntries(entries(result).sort());
     }
 
+    async deleteDirectory(directoryPath) {
+      try {
+        await fs.promises.rmdir(directoryPath, {
+          recursive: true
+        }); cAlert('Directory deleted successfully.');
+      } catch (error) {
+        cAlert(`Error deleting directory:${error}`);
+      }
+    }
 
     async getURL() {
       const options = {
@@ -359,7 +346,6 @@ class AcodePlugin {
       editorManager.editor.commands.removeCommand("clone-repo")
     }
   }
-
 
 
 
