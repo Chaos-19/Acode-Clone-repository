@@ -3,6 +3,20 @@
 ## Overview
 
  the plugin allow you to clone a Git repository to your local machine . It also supports authentication for cloning private repositories.
+ 
+ 
+ ## Updates
+
+**[Date]:** October 31, 2023
+
+**Version:** 1.0.3
+
+**Changes:**
+
+- Fixed a bug where files couldn't be copied if located directly in Termux.
+
+Feel free to reach out if you encounter any issues or have suggestions for further improvements.
+
 
 ## Features
 
