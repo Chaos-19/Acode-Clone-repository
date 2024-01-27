@@ -328,7 +328,7 @@ class AcodePlugin {
 
     async getURL() {
         try {
-            const result = await multiPrompt("Enter You Cridential", [
+            const result = await multiPrompt("enter repository meta", [
                 {
                     type: "url",
                     id: "url",
@@ -350,7 +350,7 @@ class AcodePlugin {
 
             if (result["branch"]) {
                 this.defaultBarnch = result["branch"];
-                alert(this.defaultBarnch)
+                alert(this.defaultBarnch);
             }
 
             return result["url"];
