@@ -21,9 +21,8 @@
 
 **Changes:**
 
-- now you are able to select the branch you what to clone.
+- Greater control: You can now select the branch you want to clone, giving you more flexibility and customization options.
 
-Feel free to reach out if you encounter any issues or have suggestions for further improvements.
 
 Feel free to reach out if you encounter any issues or have suggestions for further improvements.
 
