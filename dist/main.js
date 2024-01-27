@@ -542,7 +542,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ (function(module) {
 
 "use strict";
-eval("module.exports = JSON.parse('{\"id\":\"aocde.clone.repo\",\"name\":\"Clone Repository\",\"main\":\"dist/main.js\",\"version\":\"1.0.3\",\"readme\":\"readme.md\",\"icon\":\"icon.png\",\"files\":[],\"minVersionCode\":290,\"price\":0,\"author\":{\"name\":\"Kalkidan Getachew\",\"email\":\"kalgetachew375@gmail.com\",\"github\":\"https://github.com/Chaos-19\"}}');\n\n//# sourceURL=webpack://clone-repo/./plugin.json?");
+eval("module.exports = JSON.parse('{\"id\":\"aocde.clone.repo\",\"name\":\"Clone Repository\",\"main\":\"dist/main.js\",\"version\":\"2.0.0\",\"readme\":\"readme.md\",\"icon\":\"icon.png\",\"files\":[],\"minVersionCode\":290,\"price\":0,\"author\":{\"name\":\"Kalkidan Getachew\",\"email\":\"kalgetachew375@gmail.com\",\"github\":\"https://github.com/Chaos-19\"}}');\n\n//# sourceURL=webpack://clone-repo/./plugin.json?");
 
 /***/ })
 
