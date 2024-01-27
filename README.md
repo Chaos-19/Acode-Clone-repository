@@ -7,13 +7,23 @@
  
  ## Updates
 
-**[Date]:** October 31, 2023
+**Date:** October 31, 2023
 
 **Version:** 1.0.3
 
 **Changes:**
 
 - Fixed a bug where files couldn't be copied if located directly in Termux.
+
+**Date:** Jan 27, 2024
+
+**Version:** 2.0.0
+
+**Changes:**
+
+- now you are able to select the branch you what to clone.
+
+Feel free to reach out if you encounter any issues or have suggestions for further improvements.
 
 Feel free to reach out if you encounter any issues or have suggestions for further improvements.
 
